@@ -28,3 +28,51 @@ def add_contact():
     phone_book[uid] = {'name ': name , 'phone' : phone,'comment':comment  } 
 
     print(f'\nКонтакт {name} успешно дабавлен!')
+
+
+
+
+
+
+def menu() -> int:
+    main_menu = ''' Главное меню:
+    1. Открыть файл
+    2. Сохранить файл
+    3. Показать все контакты
+    4. Создать контакт
+    5. Найти контакт
+    6. Изменить контакт
+    7. Удалить контакт
+    8. Выход '''
+    print(main_menu)
+    while True:
+        select = input('  Выберетие пункт меню')
+        if select.isdigit() and 0 < int(select)<9:
+            return int (select)
+        print(' Ошибка ввода введите число от 1 до 8')
+    
+    
+
+    
+open_file()    
+while True:
+    select = menu()
+    match select:
+        case 1 :
+            open_file()
+        case 2 :
+            pass
+        case 3 :
+            show_contacts(phone_book)
+        case 4 :
+            add_contact()
+        case 5 :
+            pass
+        case 6 :
+            pass
+        case 7 :
+            pass
+        case 8 :
+            print(' До свидания ')  
+            break
+

@@ -1,6 +1,7 @@
 phone_book = {}
+path: str = 'tel.txt'
 
-def open_file(path: str = 'tel.txt'):
+def open_file():
     phone_book.clear()
     file = open(path, 'r' , encoding='UTF-8')
     data = file.readlines()
@@ -11,25 +12,94 @@ def open_file(path: str = 'tel.txt'):
     print('\nТелефонная книга загруженна!')
 
 
+def save_file():
+    data = []
+    for i, contact in phone_book.items():
+        new = ':'.join([str(i),contact.get('name'), contact.get('phone'), contact.get('comment')])
+        data.append(new)
+    data = '\n'.join(data)
+    with open(path, 'w' , encoding='UTF-8') as file:
+        file .write(data)
+    print(data)
+    print('\nТелефонная книга сохранена!')
+    print('=' * 200 + '\n')
+
+
+
+
+
 def show_contacts(book: dict[int,dict]):
     print('\n' + '=' * 200)   
     for i, cnt in book.items():
-        print(f'{i:>3}. {cnt.get("name"):<20}{cnt.get("phone"):<20}{cnt.get("comment"):<20}')
+        print(f'{i:>3}, {cnt.get("name"):<20}{cnt.get("phone"):<20}{cnt.get("comment"):<20}')
     print('=' * 200 + '\n')
 
 
 
 def add_contact():
-    uid = max(list(phone_book.keys())) + 1 
+    uid = max(list(phone_book.keys())) + 1
     
-    name = input('Введите имя контакта : ')
-    phone = input('Введите номер контакта : ')
-    comment = input('Введите комментарий к контакту : ')
-    phone_book[uid] = {'name ': name , 'phone' : phone,'comment':comment  } 
+    name = input(' Введите имя контакта : ')
+    phone = input(' Введите номер контакта : ')
+    comment = input(' Введите комментарий к контакту : ')
+    phone_book[uid] = {'name' : name , 'phone' : phone, 'comment': comment} 
 
     print(f'\nКонтакт {name} успешно дабавлен!')
+    print('=' * 200 + '\n')
 
 
+ 
+def search():
+    result = {}
+    word = input('Введите слово для поиска: ')
+    for i , contact in phone_book.items():
+        if word.lower() in ' '.join(list(contact.values())).lower():
+            result[i] = contact
+    return result
+
+def remove():
+    result = search()
+    show_contacts(result)
+    index = int(input(' Введите id который нужно удалить '))
+    del_cnt = phone_book.pop(index)
+    print(f'\nКонтакт {del_cnt.get ("name")} успешно удален!')
+    print('=' * 200 + '\n')
+
+# вариант с удалением старого контакта и добавлением нового 
+
+def change():
+    result = search()
+    show_contacts(result)
+    index = int(input(' Введите id который нужно изменить '))
+    phone_book.pop(index)
+    uid = max(list(phone_book.keys())) + 1
+    name = input(' Введите имя контакта : ')
+    phone = input(' Введите номер контакта : ')
+    comment = input(' Введите комментарий к контакту : ')
+    phone_book[uid] = {'name' : name , 'phone' : phone, 'comment': comment} 
+
+    print(f'\nКонтакт {name} успешно изменен!')
+    print('=' * 200 + '\n')
+
+# не рабочий вариант .
+# def change():
+#     result = search()
+#     show_contacts(result)
+#     index = int(input(' Введите id который нужно изменить '))
+#     uid = phone_book(index)
+#     name = input(' Введите имя контакта : ')
+#     phone = input(' Введите номер контакта : ')
+#     comment = input(' Введите комментарий к контакту : ')
+#     phone_book[uid] = {'name' : name , 'phone' : phone, 'comment': comment} 
+#     print("Контакт успешно изменен")
+
+
+
+
+    
+    
+    
+        
 
 
 
@@ -61,17 +131,18 @@ while True:
         case 1 :
             open_file()
         case 2 :
-            pass
+            save_file()
         case 3 :
             show_contacts(phone_book)
         case 4 :
             add_contact()
         case 5 :
-            pass
+            result = search()
+            show_contacts(result)
         case 6 :
-            pass
+            change()
         case 7 :
-            pass
+            remove()
         case 8 :
             print(' До свидания ')  
             break
